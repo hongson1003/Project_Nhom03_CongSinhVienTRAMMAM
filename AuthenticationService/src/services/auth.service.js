@@ -14,7 +14,10 @@ const signUp = async (data) => {
         let userExists = await db.User.findOne({
             where: {
                 codeId: data.codeId,
-            }
+            },
+            attributes: {
+                exclude: ['createdAt', 'updatedAt', 'roleId']
+            },
         })
         if (userExists)
             return {
@@ -43,7 +46,7 @@ const signUp = async (data) => {
                 }
             })
             // create access token, refresh token
-            const access_token = handleJWT.signJwt(userRole, secretKey, expiredIn);
+            const access_token = handleJWT.signJwt(handleUser.getUser(userRole), secretKey, expiredIn);
             const refresh_token = uuidv4();
             // save refresh token to db
             const token = await db.Token.create({
@@ -147,14 +150,17 @@ const signIn = async (codeId, password, access_token, refresh_token) => {
                     as: 'role',
                 }
             ],
+            attributes: {
+                exclude: ['createdAt', 'updatedAt', 'roleId']
+            },
             raw: true,
             nest: true,
         });
         if (user) {
+            t = await db.sequelize.transaction();
             const isMatch = handleUser.comparePassword(password, user.password);
             if (isMatch) {
-                t = await db.sequelize.transaction();
-                const access_token = handleJWT.signJwt(user, secretKey, expiredIn);
+                const access_token = handleJWT.signJwt(handleUser.getUser(user), secretKey, expiredIn);
                 const refresh_token = uuidv4();
                 // save sessions
                 const computerName = os.hostname();
@@ -285,10 +291,30 @@ const signOut = async (user) => {
 
 }
 
+const createLog = async (data) => {
+    try {
+        const deviceInfo = os.hostname();
+        const ipAddress = handleUser.getIPAddress();
+        const log = await db.Log.create({
+            ...data,
+            ipAddress,
+            deviceInfo,
+        });
+        return {
+            errCode: 0,
+            message: 'Log created',
+            data: log
+        }
+    } catch (error) {
+        throw error;
+    }
+}
+
 module.exports = {
     signUp,
     findUserByCodeId,
     getRolesLimit,
     signIn,
-    signOut
+    signOut,
+    createLog
 }

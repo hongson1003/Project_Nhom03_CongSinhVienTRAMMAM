@@ -18,15 +18,14 @@ const signUp = async (req, res, next) => {
             const access_token = response.data.access_token;
             const refresh_token = response.data.refresh_token;
 
-            const expiryDateLocal = new Date(Date.now() + maxAge * 1000);
-            const expiryDateUTC = new Date(expiryDateLocal);
-            expiryDateUTC.setMinutes(expiryDateLocal.getMinutes() - expiryDateLocal.getTimezoneOffset());
             // clear cookies
             res.clearCookie('access_token');
             res.clearCookie('refresh_token');
             // set cookies
-            res.cookie('access_token', access_token, { expires: expiryDateUTC, httpOnly: true })
-            res.cookie('refresh_token', refresh_token, { expires: expiryDateUTC, httpOnly: true })
+            const expires_in = new Date(Date.now() + maxAge * 1000);
+
+            res.cookie('access_token', access_token, { expires: expires_in, httpOnly: true })
+            res.cookie('refresh_token', refresh_token, { expires: expires_in, httpOnly: true })
         }
         return res.status(201).json(response);
     } catch (error) {
@@ -77,17 +76,11 @@ const signIn = async (req, res, next) => {
         if (response.errCode === 0) {
             const access_token = response.data.access_token;
             const refresh_token = response.data.refresh_token;
-            // res.cookie('access_token', access_token, { maxAge: maxAge * 1000, httpOnly: true })
-            // res.cookie('refresh_token', refresh_token, { maxAge: maxAge * 1000, httpOnly: true })
 
-            // Tính toán thời gian hết hạn dựa trên múi giờ địa phương (GMT+7)
-            const expiryDateLocal = new Date(Date.now() + maxAge * 1000);
-            // Chuyển đổi thời gian hết hạn sang UTC bằng cách cộng thêm số phút tương ứng với múi giờ
-            const expiryDateUTC = new Date(expiryDateLocal);
-            expiryDateUTC.setMinutes(expiryDateLocal.getMinutes() - expiryDateLocal.getTimezoneOffset());
+            const expires_in = new Date(Date.now() + maxAge * 1000);
 
-            res.cookie('access_token', access_token, { expires: expiryDateUTC, httpOnly: true })
-            res.cookie('refresh_token', refresh_token, { expires: expiryDateUTC, httpOnly: true })
+            res.cookie('access_token', access_token, { expires: expires_in, httpOnly: true })
+            res.cookie('refresh_token', refresh_token, { expires: expires_in, httpOnly: true })
         }
         return res.status(200).json(response);
     } catch (error) {
@@ -134,7 +127,21 @@ const reloadPage = async (req, res, next) => {
     }
 }
 
-
+const createLog = async (req, res, next) => {
+    try {
+        const { userId, action, description, severity } = req.body;
+        if (!userId || !action || !description || !Number.isInteger(severity)) {
+            return res.status(400).json({
+                errCode: 1,
+                message: 'Missing required fields'
+            });
+        }
+        const response = await authService.createLog(req.body);
+        return res.status(201).json(response);
+    } catch (error) {
+        next(error)
+    }
+}
 
 
 module.exports = {
@@ -143,5 +150,6 @@ module.exports = {
     getRolesLimit,
     signIn,
     signOut,
-    reloadPage
+    reloadPage,
+    createLog
 }

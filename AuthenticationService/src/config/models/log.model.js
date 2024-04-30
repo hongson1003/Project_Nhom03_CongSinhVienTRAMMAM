@@ -45,10 +45,11 @@ module.exports = (sequelize, DataTypes) => {
         },
         errorDetail: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: true,
+            defaultValue: null
         },
         severity: {
-            type: DataTypes.STRING,
+            type: DataTypes.INTEGER,
             allowNull: false
         },
         createdAt: DataTypes.DATE,

@@ -10,8 +10,12 @@ const comparePassword = (myPlaintextPassword, hashedPassword) => {
     return bcrypt.compareSync(myPlaintextPassword, hashedPassword); // true
 }
 const getUser = (user) => {
-    const { password, ...userWithoutPassword } = user;
-    return userWithoutPassword;
+    const { password, createdAt, updatedAt, roleId, ...userWithoutPassword } = user;
+    const { createdAt: createdAtRole, updatedAt: updatedAtRole, ...role } = userWithoutPassword.role;
+    return {
+        ...userWithoutPassword,
+        role
+    };
 }
 
 function getIPAddress() {

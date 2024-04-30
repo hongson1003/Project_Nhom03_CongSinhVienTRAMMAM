@@ -23,6 +23,7 @@ const configRoutes = async (app) => {
 
     app.post('/api/v1/auth/reload-page', userMiddleware.checkJWT, authController.reloadPage);
 
+    app.post('/api/v1/auth/log', authController.createLog);
 
 
 }

@@ -39,7 +39,6 @@ const checkJWT = async (req, res, next) => {
     } catch (error) {
         if (error.name === 'TokenExpiredError') {
             // ...do stuff
-            console.log('Token expired', access_token)
             const response = await refreshToken(refresh_token);
             if (response.errCode === 0) {
                 const access_token = response.data.access_token;
@@ -132,7 +131,6 @@ const refreshToken = async (refresh_token) => {
 
     } catch (error) {
         if (t) {
-            console.log('Rollback')
             await t.rollback();
         }
         throw error;

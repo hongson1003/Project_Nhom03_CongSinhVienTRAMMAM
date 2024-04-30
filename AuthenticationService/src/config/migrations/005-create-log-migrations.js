@@ -36,10 +36,11 @@ module.exports = {
             },
             errorDetail: {
                 type: Sequelize.STRING,
-                allowNull: false
+                allowNull: true,
+                defaultValue: null
             },
             severity: {
-                type: Sequelize.STRING,
+                type: Sequelize.INTEGER,
                 allowNull: false
             },
             createdAt: {
