@@ -3,8 +3,8 @@
 module.exports = {
     async up(queryInterface, Sequelize) {
 
-        await queryInterface.createTable('Tokens', {
-            tokenId: {
+        await queryInterface.createTable('Sessions', {
+            sessionId: {
                 allowNull: false,
                 autoIncrement: true,
                 primaryKey: true,
@@ -18,19 +18,31 @@ module.exports = {
                     key: 'codeId'
                 }
             },
-            accesss_token: {
+            ipAddress: {
                 type: Sequelize.STRING,
                 allowNull: false
             },
-            refresh_token: {
+            deviceInfo: {
                 type: Sequelize.STRING,
                 allowNull: false,
             },
-            createdTime: {
+            loginTime: {
+                type: Sequelize.DATE,
+                allowNull: false,
+            },
+            logoutTime: {
                 type: Sequelize.DATE,
             },
-            expiredTime: {
-                type: Sequelize.DATE,
+            duration: {
+                type: Sequelize.INTEGER,
+            },
+            tokenId: {
+                type: Sequelize.INTEGER,
+                allowNull: false,
+                references: {
+                    model: 'Tokens',
+                    key: 'tokenId'
+                }
             },
             createdAt: {
                 type: Sequelize.DATE,
@@ -41,6 +53,6 @@ module.exports = {
         });
     },
     async down(queryInterface, Sequelize) {
-        await queryInterface.dropTable('Tokens');
+        await queryInterface.dropTable('Sessions');
     }
 };

@@ -39,16 +39,17 @@ module.exports = (sequelize, DataTypes) => {
         },
         logoutTime: {
             type: DataTypes.DATE,
-            allowNull: false,
         },
         duration: {
             type: DataTypes.INTEGER,
-            allowNull: false,
         },
-        isActive: {
-            type: DataTypes.BOOLEAN,
+        tokenId: {
+            type: DataTypes.INTEGER,
             allowNull: false,
-            defaultValue: true
+            references: {
+                model: 'Token',
+                key: 'tokenId'
+            }
         },
         createdAt: DataTypes.DATE,
         updatedAt: DataTypes.DATE,

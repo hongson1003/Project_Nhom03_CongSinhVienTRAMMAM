@@ -16,6 +16,7 @@ const config = {
       "timestamps": true,
     },
     "timezone": "+07:00"
+
   },
   "test": {
     "username": "root",
