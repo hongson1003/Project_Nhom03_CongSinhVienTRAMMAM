@@ -7,19 +7,15 @@ module.exports = {
             courseId: {
                 allowNull: false,
                 primaryKey: true,
-                type: Sequelize.STRING
+                type: Sequelize.INTEGER,
+                autoIncrement: true,
             },
             courseName: {
                 type: Sequelize.STRING,
                 allowNull: false,
+                unique: true,
             },
             description: {
-                type: Sequelize.INTEGER,
-            },
-            managerId: {
-                type: Sequelize.STRING,
-            },
-            departmentId: {
                 type: Sequelize.STRING,
             },
             createdAt: {

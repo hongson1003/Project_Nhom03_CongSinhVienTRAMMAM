@@ -1,38 +1,56 @@
 'use strict';
-/** @type {import('sequelize-cli').Migration} */
-module.exports = {
-    async up(queryInterface, Sequelize) {
+const {
+    Model
+} = require('sequelize');
+module.exports = (sequelize, DataTypes) => {
+    class Detail_Course extends Model {
+        /**
+         * Helper method for defining associations.
+         * This method is not a part of Sequelize lifecycle.
+         * The `models/index` file will call this method automatically.
+         */
+        static associate(models) {
+            // define association here
+            Detail_Course.belongsTo(models.Course, {
+                foreignKey: 'courseId',
+                as: 'course',
+                onDelete: 'CASCADE',
+            });
 
-        await queryInterface.createTable('Detail_Course', {
-            courseId: {
-                allowNull: false,
-                primaryKey: true,
-                autoIncrement: true,
-                type: Sequelize.STRING
-            },
-            status: {
-                type: Sequelize.BOOLEAN,
-                allowNull: false,
-                defaultValue: true
-            },
-            price: {
-                type: Sequelize.INTEGER,
-            },
-            numberOfCredits: {
-                type: Sequelize.STRING,
-            },
-            prerequisiteId: {
-                type: Sequelize.STRING,
-            },
-            createdAt: {
-                type: Sequelize.DATE,
-            },
-            updatedAt: {
-                type: Sequelize.DATE,
-            }
-        });
-    },
-    async down(queryInterface, Sequelize) {
-        await queryInterface.dropTable('Detail_Course');
+        }
     }
+    Detail_Course.init({
+        courseId: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            primaryKey: true,
+            references: {
+                model: 'Course',
+                key: 'courseId'
+            },
+            onDelete: 'CASCADE',
+        },
+        price: {
+            type: DataTypes.FLOAT,
+            allowNull: false,
+        },
+        numberOfCredits: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        prerequisiteId: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+            references: {
+                model: 'Courses',
+                key: 'courseId'
+            },
+        },
+        createdAt: DataTypes.DATE,
+        updatedAt: DataTypes.DATE,
+    }, {
+        sequelize,
+        modelName: 'Detail_Course',
+    });
+    return Detail_Course;
 };

@@ -3,7 +3,7 @@
 module.exports = {
     async up(queryInterface, Sequelize) {
 
-        await queryInterface.createTable('Detail_Certifications_Users', {
+        await queryInterface.createTable('Detail_Certification_Users', {
             certificationId: {
                 allowNull: false,
                 primaryKey: true,

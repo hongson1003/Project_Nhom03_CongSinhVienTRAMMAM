@@ -11,6 +11,10 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
+            Specialize.belongsTo(models.Department, {
+                foreignKey: 'departmentId',
+                as: 'department'
+            })
 
         }
     }
@@ -23,19 +27,27 @@ module.exports = (sequelize, DataTypes) => {
         },
         name: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            unique: true
         },
         description: {
             type: DataTypes.STRING,
+        },
+        totalCredits: {
+            type: DataTypes.INTEGER,
             allowNull: false
         },
-        department: {
+        departmentId: {
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
                 model: 'Department',
                 key: 'departmentId'
             }
+        },
+        numberOfYearsTraining: {
+            type: DataTypes.FLOAT,
+            allowNull: false
         },
         createdAt: DataTypes.DATE,
         updatedAt: DataTypes.DATE,

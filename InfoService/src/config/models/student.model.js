@@ -11,7 +11,11 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-
+            Student.belongsTo(models.User, {
+                foreignKey: 'codeId',
+                onDelete: 'CASCADE',
+                as: 'user'
+            });
         }
     }
     Student.init({
@@ -26,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         numberOfCreditsIsCompleted: {
             type: DataTypes.INTEGER,
-            allowNull: false
+            defaultValue: 0
         },
         totalCredits: {
             type: DataTypes.INTEGER,
@@ -34,12 +38,13 @@ module.exports = (sequelize, DataTypes) => {
         },
         cumulativeGPA: {
             type: DataTypes.FLOAT,
-            allowNull: false
         },
-        studentStatus: {
-            type: DataTypes.BOOLEAN,
+        yearGraduated: {
+            type: DataTypes.DATE,
+        },
+        yearGraduteDeadline: {
+            type: DataTypes.DATE,
             allowNull: false,
-            defaultValue: true
         },
         createdAt: DataTypes.DATE,
         updatedAt: DataTypes.DATE,

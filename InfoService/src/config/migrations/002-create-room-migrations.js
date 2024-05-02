@@ -3,21 +3,26 @@
 module.exports = {
     async up(queryInterface, Sequelize) {
 
-        await queryInterface.createTable('FrameWorkPrograms', {
-            frameWorkId: {
+        await queryInterface.createTable('Rooms', {
+            roomId: {
                 allowNull: false,
                 primaryKey: true,
-                type: Sequelize.STRING
+                autoIncrement: true,
+                type: Sequelize.INTEGER
+            },
+            name: {
+                type: Sequelize.STRING,
+                unique: true,
+                allowNull: false
+            },
+            basisId: {
+                type: Sequelize.INTEGER,
+                references: {
+                    model: 'Bases',
+                    key: 'basisId'
+                }
             },
             description: {
-                type: Sequelize.STRING,
-                allowNull: false,
-                unique: true
-            },
-            totalCredits: {
-                type: Sequelize.INTEGER,
-            },
-            specializeId: {
                 type: Sequelize.STRING,
             },
             createdAt: {
@@ -29,6 +34,6 @@ module.exports = {
         });
     },
     async down(queryInterface, Sequelize) {
-        await queryInterface.dropTable('FrameWorkPrograms');
+        await queryInterface.dropTable('Rooms');
     }
 };

@@ -19,7 +19,7 @@ module.exports = {
             },
             numberOfCreditsIsCompleted: {
                 type: Sequelize.INTEGER,
-                allowNull: false
+                defaultValue: 0
             },
             totalCredits: {
                 type: Sequelize.INTEGER,
@@ -27,12 +27,13 @@ module.exports = {
             },
             cumulativeGPA: {
                 type: Sequelize.FLOAT,
-                allowNull: false
             },
-            studentStatus: {
-                type: Sequelize.BOOLEAN,
+            yearGraduated: {
+                type: Sequelize.DATE,
+            },
+            yearGraduteDeadline: {
+                type: Sequelize.DATE,
                 allowNull: false,
-                defaultValue: true
             },
             createdAt: {
                 type: Sequelize.DATE,

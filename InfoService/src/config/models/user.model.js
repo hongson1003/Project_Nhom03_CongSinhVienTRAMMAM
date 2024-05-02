@@ -11,7 +11,22 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-
+            User.belongsTo(models.Basis, {
+                foreignKey: 'basisId',
+                as: 'basis'
+            });
+            User.belongsTo(models.Specialize, {
+                foreignKey: 'specializeId',
+                as: 'specialize'
+            });
+            User.hasOne(models.Student, {
+                foreignKey: 'codeId',
+                as: 'student'
+            });
+            User.hasOne(models.Teacher, {
+                foreignKey: 'codeId',
+                as: 'teacher'
+            });
 
         }
     }
@@ -32,10 +47,10 @@ module.exports = (sequelize, DataTypes) => {
         phoneNumber: {
             type: DataTypes.STRING,
             allowNull: false,
+            unique: true
         },
         email: {
             type: DataTypes.STRING,
-            allowNull: false,
         },
         gender: {
             type: DataTypes.STRING,
@@ -51,7 +66,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         avatar: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: true
         },
         placeOfBirth: {
             type: DataTypes.STRING,
@@ -61,25 +76,15 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false
         },
-        bankName: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
         schoolEntryDate: {
             type: DataTypes.DATE,
             allowNull: false
-        },
-        parentId: {
-            type: DataTypes.STRING,
-        },
-        mothorId: {
-            type: DataTypes.STRING,
         },
         profileCode: {
             type: DataTypes.STRING,
             allowNull: false
         },
-        basisCode: {
+        basisId: {
             type: DataTypes.STRING,
             allowNull: false
         },

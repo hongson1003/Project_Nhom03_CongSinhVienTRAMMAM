@@ -13,6 +13,7 @@ module.exports = {
             name: {
                 type: Sequelize.STRING,
                 allowNull: false,
+                unique: true
             },
             departmentId: {
                 type: Sequelize.INTEGER,
@@ -25,6 +26,15 @@ module.exports = {
             description: {
                 type: Sequelize.STRING,
             },
+            totalCredits: {
+                type: Sequelize.INTEGER,
+                allowNull: false
+            },
+            numberOfYearsTraining: {
+                type: Sequelize.FLOAT,
+                allowNull: false
+            },
+
             createdAt: {
                 type: Sequelize.DATE,
             },

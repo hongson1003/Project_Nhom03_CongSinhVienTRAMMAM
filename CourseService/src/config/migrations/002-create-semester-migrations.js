@@ -7,23 +7,16 @@ module.exports = {
             semesterId: {
                 allowNull: false,
                 primaryKey: true,
-                type: Sequelize.STRING
+                type: Sequelize.INTEGER,
+                autoIncrement: true,
             },
             name: {
                 type: Sequelize.STRING,
                 allowNull: false,
-                unique: true
             },
-            description: {
+            specializeId: {
                 type: Sequelize.INTEGER,
-            },
-            frameWorkProgramId: {
-                type: Sequelize.STRING,
                 allowNull: false,
-                references: {
-                    model: 'FrameWorkPrograms',
-                    key: 'frameWorkId'
-                },
             },
             createdAt: {
                 type: Sequelize.DATE,

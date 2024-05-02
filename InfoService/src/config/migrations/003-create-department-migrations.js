@@ -18,12 +18,17 @@ module.exports = {
                 type: Sequelize.STRING,
             },
             // alter manageID to managerId
-            address: {
-                type: Sequelize.STRING,
+            roomId: {
+                type: Sequelize.INTEGER,
                 allowNull: false,
+                references: {
+                    model: 'Rooms',
+                    key: 'roomId'
+                }
             },
             phoneNumber: {
                 type: Sequelize.STRING,
+                unique: true,
             },
             createdAt: {
                 type: Sequelize.DATE,

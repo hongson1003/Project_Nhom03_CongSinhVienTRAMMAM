@@ -1,37 +1,43 @@
 'use strict';
-/** @type {import('sequelize-cli').Migration} */
-module.exports = {
-    async up(queryInterface, Sequelize) {
+const {
+    Model
+} = require('sequelize');
+module.exports = (sequelize, DataTypes) => {
+    class Course extends Model {
+        /**
+         * Helper method for defining associations.
+         * This method is not a part of Sequelize lifecycle.
+         * The `models/index` file will call this method automatically.
+         */
+        static associate(models) {
+            // define association here
+            Course.hasOne(models.Detail_Course, {
+                foreignKey: 'courseId',
+                as: 'detail_course',
+            });
 
-        await queryInterface.createTable('Course', {
-            courseId: {
-                allowNull: false,
-                primaryKey: true,
-                autoIncrement: true,
-                type: Sequelize.STRING
-            },
-            courseName: {
-                type: Sequelize.STRING,
-                allowNull: false,
-            },
-            description: {
-                type: Sequelize.INTEGER,
-            },
-            managerId: {
-                type: Sequelize.STRING,
-            },
-            departmentId: {
-                type: Sequelize.STRING,
-            },
-            createdAt: {
-                type: Sequelize.DATE,
-            },
-            updatedAt: {
-                type: Sequelize.DATE,
-            }
-        });
-    },
-    async down(queryInterface, Sequelize) {
-        await queryInterface.dropTable('Course');
+        }
     }
+    Course.init({
+        courseId: {
+            allowNull: false,
+            primaryKey: true,
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+        },
+        courseName: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            unique: true,
+        },
+        description: {
+            type: DataTypes.STRING,
+        },
+        createdAt: DataTypes.DATE,
+        updatedAt: DataTypes.DATE,
+    }, {
+        sequelize,
+        modelName: 'Course',
+    });
+    return Course;
 };

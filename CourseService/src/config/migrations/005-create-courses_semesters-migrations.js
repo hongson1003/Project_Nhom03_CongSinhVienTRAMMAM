@@ -3,18 +3,19 @@
 module.exports = {
     async up(queryInterface, Sequelize) {
 
-        await queryInterface.createTable('Semesters_Courses', {
+        await queryInterface.createTable('Semester_Courses', {
             semesterId: {
                 allowNull: false,
                 primaryKey: true,
-                type: Sequelize.STRING,
+                type: Sequelize.INTEGER,
+                autoIncrement: true,
                 references: {
                     model: 'Semesters',
                     key: 'semesterId'
                 },
             },
             courseId: {
-                type: Sequelize.STRING,
+                type: Sequelize.INTEGER,
                 allowNull: false,
                 primaryKey: true,
                 references: {
@@ -31,6 +32,6 @@ module.exports = {
         });
     },
     async down(queryInterface, Sequelize) {
-        await queryInterface.dropTable('Semesters_Courses');
+        await queryInterface.dropTable('Semester_Courses');
     }
 };

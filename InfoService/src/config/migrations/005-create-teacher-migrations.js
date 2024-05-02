@@ -13,7 +13,14 @@ module.exports = {
                     key: 'codeId'
                 }
             },
-
+            educationLevel: {
+                type: Sequelize.STRING,
+                allowNull: false
+            },
+            yearContactExpired: {
+                type: Sequelize.DATE,
+                allowNull: false
+            },
             createdAt: {
                 type: Sequelize.DATE,
             },

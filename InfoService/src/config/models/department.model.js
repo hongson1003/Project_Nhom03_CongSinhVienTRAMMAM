@@ -11,7 +11,10 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-
+            Department.belongsTo(models.Room, {
+                foreignKey: 'roomId',
+                as: 'room'
+            })
         }
     }
     Department.init({
@@ -24,18 +27,23 @@ module.exports = (sequelize, DataTypes) => {
         name: {
             type: DataTypes.STRING,
             allowNull: false,
+            unique: true
         },
         description: {
             type: DataTypes.STRING,
-            allowNull: false,
         },
-        address: {
-            type: DataTypes.STRING,
+        roomId: {
+            type: DataTypes.INTEGER,
             allowNull: false,
+            references: {
+                model: 'Room',
+                key: 'roomId'
+            }
         },
         phoneNumber: {
             type: DataTypes.STRING,
             allowNull: false,
+            unique: true,
         },
         createdAt: DataTypes.DATE,
         updatedAt: DataTypes.DATE,

@@ -11,7 +11,11 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-
+            Teacher.belongsTo(models.User, {
+                foreignKey: 'codeId',
+                onDelete: 'CASCADE',
+                onUpdate: 'CASCADE',
+            })
         }
     }
     Teacher.init({
@@ -19,6 +23,14 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             primaryKey: true,
             allowNull: false,
+        },
+        educationLevel: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        yearContactExpired: {
+            type: DataTypes.DATE,
+            allowNull: false
         },
         createdAt: DataTypes.DATE,
         updatedAt: DataTypes.DATE,

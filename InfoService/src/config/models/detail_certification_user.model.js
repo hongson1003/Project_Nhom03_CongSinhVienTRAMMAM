@@ -11,7 +11,14 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here 
-
+            Detail_Certification_User.belongsTo(models.User, {
+                foreignKey: 'userId',
+                as: 'user'
+            });
+            Detail_Certification_User.belongsTo(models.Certification, {
+                foreignKey: 'certificationId',
+                as: 'certification'
+            });
         }
     }
     Detail_Certification_User.init({
@@ -19,12 +26,20 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             primaryKey: true,
             allowNull: false,
-            autoIncrement: true
+            autoIncrement: true,
+            references: {
+                model: 'Certification',
+                key: 'id'
+            }
         },
         userId: {
             type: DataTypes.STRING,
             primaryKey: true,
-            allowNull: false
+            allowNull: false,
+            references: {
+                model: 'User',
+                key: 'codeId'
+            }
         },
         achievedDate: {
             type: DataTypes.DATE,

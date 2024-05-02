@@ -3,7 +3,7 @@ const {
     Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-    class Certification extends Model {
+    class Room extends Model {
         /**
          * Helper method for defining associations.
          * This method is not a part of Sequelize lifecycle.
@@ -11,10 +11,14 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
+            Room.belongsTo(models.Basis, {
+                foreignKey: 'basisId',
+                as: 'basis'
+            })
         }
     }
-    Certification.init({
-        certificationId: {
+    Room.init({
+        roomId: {
             allowNull: false,
             primaryKey: true,
             autoIncrement: true,
@@ -25,15 +29,21 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             unique: true
         },
+        basisId: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: 'Basis',
+                key: 'basisId'
+            }
+        },
         description: {
             type: DataTypes.STRING,
-            allowNull: false
         },
         createdAt: DataTypes.DATE,
         updatedAt: DataTypes.DATE,
     }, {
         sequelize,
-        modelName: 'Certification',
+        modelName: 'Room',
     });
-    return Certification;
+    return Room;
 };

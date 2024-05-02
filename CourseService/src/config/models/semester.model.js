@@ -16,21 +16,19 @@ module.exports = (sequelize, DataTypes) => {
         }
     }
     Semester.init({
-        frameWorkId: {
-            type: DataTypes.STRING,
-            primaryKey: true,
+        semesterId: {
             allowNull: false,
+            primaryKey: true,
+            type: DataTypes.INTEGER,
+            autoIncrement: true
         },
         name: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        description: {
-            type: DataTypes.STRING,
+        specializeId: {
+            type: DataTypes.INTEGER,
             allowNull: false,
-        },
-        frameWorkProgramId: {
-            type: DataTypes.STRING,
         },
         createdAt: DataTypes.DATE,
         updatedAt: DataTypes.DATE,

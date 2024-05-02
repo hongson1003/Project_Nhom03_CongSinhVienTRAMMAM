@@ -19,6 +19,7 @@ module.exports = {
             },
             phoneNumber: {
                 type: Sequelize.STRING,
+                allowNull: false,
                 unique: true
             },
             email: {
@@ -43,20 +44,8 @@ module.exports = {
             nation: {
                 type: Sequelize.STRING,
             },
-            bankName: {
-                type: Sequelize.STRING,
-            },
-            branchName: {
-                type: Sequelize.STRING,
-            },
             schoolEntryDate: {
                 type: Sequelize.DATE,
-            },
-            parentId: {
-                type: Sequelize.STRING,
-            },
-            mothorId: {
-                type: Sequelize.STRING,
             },
             profileCode: {
                 type: Sequelize.STRING,
@@ -64,7 +53,7 @@ module.exports = {
             basisId: {
                 type: Sequelize.INTEGER,
                 references: {
-                    model: 'Basises',
+                    model: 'Bases',
                     key: 'basisId'
                 }
             },

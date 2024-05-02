@@ -7,11 +7,13 @@ module.exports = {
             courseId: {
                 allowNull: false,
                 primaryKey: true,
-                type: Sequelize.STRING,
+                type: Sequelize.INTEGER,
+                autoIncrement: true,
                 references: {
                     model: 'Courses',
                     key: 'courseId'
                 },
+                onDelete: 'CASCADE',
             },
             status: {
                 type: Sequelize.BOOLEAN,
@@ -19,14 +21,16 @@ module.exports = {
                 defaultValue: true
             },
             price: {
-                type: Sequelize.INTEGER,
+                type: Sequelize.FLOAT,
+                allowNull: false,
             },
             numberOfCredits: {
-                type: Sequelize.STRING,
+                type: Sequelize.INTEGER,
+                allowNull: false,
             },
             prerequisiteId: {
-                type: Sequelize.STRING,
-                allowNull: false,
+                type: Sequelize.INTEGER,
+                allowNull: true,
                 references: {
                     model: 'Courses',
                     key: 'courseId'
