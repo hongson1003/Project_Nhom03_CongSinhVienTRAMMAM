@@ -14,8 +14,8 @@ const createNewRoom = async (req, res, next) => {
         // check basis is exist
         const resBasis = await infoService.getBasisById(basisId);
         if (resBasis.errCode !== 0) {
-            return res.status(400).json({
-                errCode: 1,
+            return res.status(200).json({
+                errCode: 404,
                 message: 'Basis not found'
             })
         };
@@ -179,7 +179,7 @@ const createNewSpecialize = async (req, res, next) => {
     try {
         const { name, departmentId, numberOfYearsTraining, totalCredits } = req.body;
         if (!name || !departmentId || !numberOfYearsTraining || !totalCredits) {
-            return res.status(400).json({
+            return res.status(200).json({
                 errCode: 1,
                 message: 'Missing required fields'
             })
@@ -187,7 +187,7 @@ const createNewSpecialize = async (req, res, next) => {
         // check department is exist
         const resDepartment = await infoService.getDepartmentById(departmentId);
         if (resDepartment.errCode !== 0) {
-            return res.status(400).json({
+            return res.status(200).json({
                 errCode: 1,
                 message: 'Department not found'
             })
@@ -241,7 +241,7 @@ const createNewUser = async (req, res, next) => {
         if (!codeId || !firstName || !lastName || !phoneNumber || !email || !Number.isInteger(gender) || !avatar ||
             !birthdate || !address || !placeOfBirth || !nation || !schoolEntryDate ||
             !profileCode || !basisId || !specializeId) {
-            return res.status(400).json({
+            return res.status(200).json({
                 errCode: 1,
                 message: 'Missing required fields'
             })
@@ -249,7 +249,7 @@ const createNewUser = async (req, res, next) => {
         // check basis is exist
         const resBasis = await infoService.getBasisById(basisId);
         if (resBasis.errCode !== 0) {
-            return res.status(400).json({
+            return res.status(200).json({
                 errCode: 1,
                 message: 'Basis not found'
             })
@@ -257,7 +257,7 @@ const createNewUser = async (req, res, next) => {
         // check specialize is exist
         const resSpecialize = await infoService.getSpecializeById(specializeId);
         if (resSpecialize.errCode !== 0) {
-            return res.status(400).json({
+            return res.status(200).json({
                 errCode: 1,
                 message: 'Specialize not found'
             })
@@ -289,7 +289,7 @@ const updateUser = async (req, res, next) => {
         if (!codeId || !firstName || !lastName || !phoneNumber || !email || !Number.isInteger(gender) || !avatar ||
             !birthdate || !address || !placeOfBirth || !nation || !schoolEntryDate ||
             !profileCode || !basisId || !specializeId) {
-            return res.status(400).json({
+            return res.status(200).json({
                 errCode: 1,
                 message: 'Missing required fields'
             })
@@ -297,7 +297,7 @@ const updateUser = async (req, res, next) => {
         // check basis is exist
         const resBasis = await infoService.getBasisById(basisId);
         if (resBasis.errCode !== 0) {
-            return res.status(400).json({
+            return res.status(200).json({
                 errCode: 1,
                 message: 'Basis not found'
             })
@@ -305,7 +305,7 @@ const updateUser = async (req, res, next) => {
         // check specialize is exist
         const resSpecialize = await infoService.getSpecializeById(specializeId);
         if (resSpecialize.errCode !== 0) {
-            return res.status(400).json({
+            return res.status(200).json({
                 errCode: 1,
                 message: 'Specialize not found'
             })

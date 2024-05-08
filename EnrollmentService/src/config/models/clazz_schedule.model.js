@@ -11,7 +11,9 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-
+            Clazz_Schedule.belongsTo(models.Clazz, { foreignKey: 'clazzId', as: 'clazz' });
+            Clazz_Schedule.belongsTo(models.Day, { foreignKey: 'dayId', as: 'day' });
+            Clazz_Schedule.belongsTo(models.Lession, { foreignKey: 'lessionId', as: 'lession' });
         }
     }
     Clazz_Schedule.init({
@@ -25,15 +27,35 @@ module.exports = (sequelize, DataTypes) => {
             references: {
                 model: 'Clazz',
                 key: 'clazzId'
-            }
+            },
+            onDelete: 'CASCADE',
+            onUpdate: 'CASCADE'
         },
-        scheduleId: {
+        dayId: {
             type: DataTypes.INTEGER,
+            allowNull: false,
             references: {
-                model: 'Schedule',
-                key: 'scheduleId'
-            }
+                model: 'Day',
+                key: 'dayId'
+            },
         },
+        lessionId: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: 'Lession',
+                key: 'lessionId'
+            },
+        },
+        startTime: {
+            type: DataTypes.DATE,
+            allowNull: false
+        },
+        endTime: {
+            type: DataTypes.DATE,
+            allowNull: false
+        },
+        groupPractise: DataTypes.INTEGER,
         createdAt: DataTypes.DATE,
         updatedAt: DataTypes.DATE,
     }, {

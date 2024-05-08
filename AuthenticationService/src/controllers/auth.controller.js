@@ -1,6 +1,5 @@
 import authService from "../services/auth.service";
 require('dotenv').config();
-const maxAge = +process.env.MAX_AGE;
 
 const signUp = async (req, res, next) => {
     try {
@@ -14,19 +13,6 @@ const signUp = async (req, res, next) => {
         }
         // create user
         const response = await authService.signUp(req.body);
-        if (response.errCode === 0) {
-            const access_token = response.data.access_token;
-            const refresh_token = response.data.refresh_token;
-
-            // clear cookies
-            res.clearCookie('access_token');
-            res.clearCookie('refresh_token');
-            // set cookies
-            const expires_in = new Date(Date.now() + maxAge * 1000);
-
-            res.cookie('access_token', access_token, { expires: expires_in, httpOnly: true })
-            res.cookie('refresh_token', refresh_token, { expires: expires_in, httpOnly: true })
-        }
         return res.status(201).json(response);
     } catch (error) {
         next(error)
@@ -49,7 +35,6 @@ const findUserByCodeId = async (req, res, next) => {
     }
 }
 
-
 const getRolesLimit = async (req, res, next) => {
     try {
         const limit = +req.query.limit;
@@ -63,25 +48,17 @@ const getRolesLimit = async (req, res, next) => {
 
 const signIn = async (req, res, next) => {
     try {
-        const access_token = req.access_token;
-        const refresh_token = req.refresh_token;
+        const authorize = req.headers['authorization'];
+        const access_token = authorize.substring(7);
+        const refresh_token = req.headers['refresh-token'];
         const { codeId, password } = req.body;
         if (!codeId || !password) {
-            return res.status(400).json({
+            return res.status(200).json({
                 errCode: 1,
                 message: 'Missing required fields'
             });
         }
         const response = await authService.signIn(codeId, password, access_token, refresh_token);
-        if (response.errCode === 0) {
-            const access_token = response.data.access_token;
-            const refresh_token = response.data.refresh_token;
-
-            const expires_in = new Date(Date.now() + maxAge * 1000);
-
-            res.cookie('access_token', access_token, { expires: expires_in, httpOnly: true })
-            res.cookie('refresh_token', refresh_token, { expires: expires_in, httpOnly: true })
-        }
         return res.status(200).json(response);
     } catch (error) {
         next(error)
@@ -92,10 +69,6 @@ const signOut = async (req, res, next) => {
     try {
         const user = req.user;
         const response = await authService.signOut(user);
-        if (response.errCode === 0) {
-            res.clearCookie('access_token');
-            res.clearCookie('refresh_token');
-        }
         return res.status(200).json(response);
     } catch (error) {
         next(error)
@@ -104,24 +77,19 @@ const signOut = async (req, res, next) => {
 
 const reloadPage = async (req, res, next) => {
     try {
-        const access_token = req.access_token;
-        const refresh_token = req.refresh_token;
-        const user = req.user;
+        const headers = req.headers;
+        const authorization = headers['authorization'];
+        const access_token = authorization.substring(7);
+        const refresh_token = headers['refresh-token'];
         if (!access_token || !refresh_token) {
             return res.status(401).json({
                 errCode: 1,
                 message: 'Unauthorized access'
             });
         }
-        return res.status(200).json({
-            errCode: 0,
-            message: 'Reload page successfully',
-            data: {
-                user,
-                access_token,
-                refresh_token,
-            }
-        });
+        // refresh token
+        const response = await authService.reloadPage(refresh_token);
+        return res.status(200).json(response);
     } catch (error) {
         next(error);
     }
@@ -143,6 +111,17 @@ const createLog = async (req, res, next) => {
     }
 }
 
+const getUsers = async (req, res, next) => {
+    try {
+        const limit = +req.query.limit;
+        const user = req.user;
+        const response = await authService.getUsers(limit, user);
+        return res.status(200).json(response);
+    } catch (error) {
+        next(error)
+    }
+}
+
 
 module.exports = {
     signUp,
@@ -151,5 +130,6 @@ module.exports = {
     signIn,
     signOut,
     reloadPage,
-    createLog
+    createLog,
+    getUsers
 }

@@ -12,10 +12,12 @@ module.exports = {
             courseId: {
                 type: Sequelize.INTEGER,
                 allowNull: false,
+                primaryKey: true,
             },
             semester: {
                 type: Sequelize.STRING,
                 allowNull: false,
+                primaryKey: true,
             },
             createdAt: {
                 type: Sequelize.DATE,

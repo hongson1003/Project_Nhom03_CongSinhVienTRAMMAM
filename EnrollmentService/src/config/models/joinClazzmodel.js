@@ -3,7 +3,7 @@ const {
     Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-    class Clazz_Schedule extends Model {
+    class Join_Clazz extends Model {
         /**
          * Helper method for defining associations.
          * This method is not a part of Sequelize lifecycle.
@@ -11,11 +11,14 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-
+            Join_Clazz.belongsTo(models.Clazz, {
+                foreignKey: 'clazzId',
+                as: 'clazz'
+            });
         }
     }
-    Clazz_Schedule.init({
-        clazzScheduleId: {
+    Join_Clazz.init({
+        joinClazzId: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true
@@ -27,22 +30,16 @@ module.exports = (sequelize, DataTypes) => {
                 key: 'clazzId'
             }
         },
-        scheduleId: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: 'Schedule',
-                key: 'scheduleId'
-            }
-        },
         studentId: {
             type: DataTypes.STRING,
             allowNull: false,
         },
+        groupPractise: DataTypes.INTEGER,
         createdAt: DataTypes.DATE,
         updatedAt: DataTypes.DATE,
     }, {
         sequelize,
-        modelName: 'Clazz_Schedule',
+        modelName: 'Join_Clazz',
     });
-    return Clazz_Schedule;
+    return Join_Clazz;
 };

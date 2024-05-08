@@ -15,16 +15,17 @@ const configRoutes = async (app) => {
 
     app.post('/api/v1/auth/signup', authController.signUp);
 
-    app.get('/api/v1/user', userMiddleware.checkJWT, authController.findUserByCodeId);
+    app.get('/api/v1/user', userMiddleware.extractAccessToken, authController.findUserByCodeId);
 
     app.post('/api/v1/auth/signin', authController.signIn);
 
-    app.post('/api/v1/auth/signout', userMiddleware.checkJWT, authController.signOut);
+    app.post('/api/v1/auth/signout', userMiddleware.extractAccessToken, authController.signOut);
 
-    app.post('/api/v1/auth/reload-page', userMiddleware.checkJWT, authController.reloadPage);
+    app.post('/api/v1/auth/reload-page', authController.reloadPage);
 
     app.post('/api/v1/auth/log', authController.createLog);
 
+    app.get('/api/v1/auth/users', userMiddleware.extractAccessToken, authController.getUsers);
 
 }
 

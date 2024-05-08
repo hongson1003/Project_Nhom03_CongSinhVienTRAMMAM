@@ -1,0 +1,710 @@
+{
+    "http": {
+        "port": 8000
+    },
+    "apiEndpoints": {
+        "api": {}
+    },
+    "services": {
+        "authentication-service": {
+            "url": "http://localhost:8080"
+        },
+        "info-service": {
+            "url": "http://localhost:8081"
+        },
+        "course-service": {
+            "url": "http://localhost:8082"
+        },
+        "enrollment-service": {
+            "url": "http://localhost:8083"
+        },
+        "grade-service": {
+            "url": "http://localhost:8084"
+        },
+        "payment-service": {
+            "url": "http://localhost:8085"
+        }
+    },
+    "routes": {
+        "login-route": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "POST"
+            ],
+            "path": "/api/v1/auth/signin",
+            "service": "authentication-service"
+        },
+        "logout-route": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "POST"
+            ],
+            "path": "/api/v1/auth/signout",
+            "service": "authentication-service"
+        },
+        "signup-route": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "POST"
+            ],
+            "path": "/api/v1/auth/signup",
+            "service": "authentication-service"
+        },
+        "reload": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "GET"
+            ],
+            "path": "/api/v1/auth/reload-page",
+            "service": "authentication-service"
+        },
+        "find-user": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "GET"
+            ],
+            "path": "/api/v1/user",
+            "service": "authentication-service"
+        },
+        "roles-limit": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "GET"
+            ],
+            "path": "/api/v1/auth/role",
+            "service": "info-service"
+        },
+        "get-users": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "GET"
+            ],
+            "path": "/api/v1/auth/users",
+            "service": "course-service"
+        },
+        "new-basic": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "POST"
+            ],
+            "path": "/api/v1/new-basis",
+            "service": "info-service"
+        },
+        "get-bases": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "GET"
+            ],
+            "path": "/api/v1/basis",
+            "service": "info-service"
+        },
+        "get-basis-by-id": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "GET"
+            ],
+            "path": "/api/v1/basis",
+            "service": "info-service"
+        },
+        "update-basis": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "PUT"
+            ],
+            "path": "/api/v1/basis",
+            "service": "info-service"
+        },
+        "delete-basis": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "DELETE"
+            ],
+            "path": "/api/v1/basis",
+            "service": "info-service"
+        },
+        "new-room": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "POST"
+            ],
+            "path": "/api/v1/new-room",
+            "service": "info-service"
+        },
+        "get-rooms": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "GET"
+            ],
+            "path": "/api/v1/room",
+            "service": "info-service"
+        },
+        "delete-room": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "DELETE"
+            ],
+            "path": "/api/v1/room",
+            "service": "info-service"
+        },
+        "get-room-by-id": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "GET"
+            ],
+            "path": "/api/v1/room",
+            "service": "info-service"
+        },
+        "new-department": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "POST"
+            ],
+            "path": "/api/v1/new-department",
+            "service": "info-service"
+        },
+        "get-departments": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "GET"
+            ],
+            "path": "/api/v1/department",
+            "service": "info-service"
+        },
+        "get-department-by-id": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "GET"
+            ],
+            "path": "/api/v1/department",
+            "service": "info-service"
+        },
+        "delete-department": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "DELETE"
+            ],
+            "path": "/api/v1/department",
+            "service": "info-service"
+        },
+        "new-specialize": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "POST"
+            ],
+            "path": "/api/v1/new-specialize",
+            "service": "info-service"
+        },
+        "get-specializes": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "GET"
+            ],
+            "path": "/api/v1/specialize",
+            "service": "info-service"
+        },
+        "get-specialize-by-id": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "GET"
+            ],
+            "path": "/api/v1/specialize",
+            "service": "info-service"
+        },
+        "delete-specialize": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "DELETE"
+            ],
+            "path": "/api/v1/specialize",
+            "service": "info-service"
+        },
+        "new-user": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "POST"
+            ],
+            "path": "/api/v1/new-user",
+            "service": "info-service"
+        },
+        "delete-user": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "DELETE"
+            ],
+            "path": "/api/v1/user",
+            "service": "info-service"
+        },
+        "update-user": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "PUT"
+            ],
+            "path": "/api/v1/user",
+            "service": "info-service"
+        },
+        "get-user-infos": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "GET"
+            ],
+            "path": "/api/v1/user",
+            "service": "info-service"
+        },
+        "get-user-info-by-id": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "GET"
+            ],
+            "path": "/api/v1/user",
+            "service": "info-service"
+        },
+        "new-student": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "POST"
+            ],
+            "path": "/api/v1/new-student",
+            "service": "info-service"
+        },
+        "get-student-by-id": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "GET"
+            ],
+            "path": "/api/v1/student",
+            "service": "info-service"
+        },
+        "update-student": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "PUT"
+            ],
+            "path": "/api/v1/student",
+            "service": "info-service"
+        },
+        "new-teacher": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "POST"
+            ],
+            "path": "/api/v1/new-teacher",
+            "service": "info-service"
+        },
+        "update-teacher": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "PUT"
+            ],
+            "path": "/api/v1/teacher",
+            "service": "info-service"
+        },
+        "delete-teacher": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "DELETE"
+            ],
+            "path": "/api/v1/teacher",
+            "service": "info-service"
+        },
+        "get-teacher-by-id": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "GET"
+            ],
+            "path": "/api/v1/teacher",
+            "service": "info-service"
+        },
+        "new-course": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "POST"
+            ],
+            "path": "/api/v1/course",
+            "service": "course-service"
+        },
+        "get-course-ids": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "GET"
+            ],
+            "path": "/api/v1/course/info/ids",
+            "service": "course-service"
+        },
+        "get-courses": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "GET"
+            ],
+            "path": "/api/v1/course",
+            "service": "course-service"
+        },
+        "get-course-by-id": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "GET"
+            ],
+            "path": "/api/v1/course",
+            "service": "course-service"
+        },
+        "delete-course": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "DELETE"
+            ],
+            "path": "/api/v1/course",
+            "service": "course-service"
+        },
+        "new-detail-course": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "POST"
+            ],
+            "path": "/api/v1/course/detail",
+            "service": "course-service"
+        },
+        "get-semester-by-specialize": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "GET"
+            ],
+            "path": "/api/v1/course/specialize/semester",
+            "service": "course-service"
+        },
+        "new-course-register": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "POST"
+            ],
+            "path": "/api/v1/enrollment/course-register",
+            "service": "enrollment-service"
+        },
+        "get-course-registers": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "GET"
+            ],
+            "path": "/api/v1/enrollment/course-register",
+            "service": "enrollment-service"
+        },
+        "delete-course-register": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "DELETE"
+            ],
+            "path": "/api/v1/enrollment/course-register",
+            "service": "enrollment-service"
+        },
+        "new-semester": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "POST"
+            ],
+            "path": "/api/v1/course/semester",
+            "service": "course-service"
+        },
+        "add-course-to-semester": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "POST"
+            ],
+            "path": "/api/v1/course/semester/add-course",
+            "service": "course-service"
+        },
+        "new-clazz": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "POST"
+            ],
+            "path": "/api/v1/enrollment/clazz",
+            "service": "enrollment-service"
+        },
+        "get-clazzes": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "GET"
+            ],
+            "path": "/api/v1/enrollment/clazz",
+            "service": "enrollment-service"
+        },
+        "delete-clazz": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "DELETE"
+            ],
+            "path": "/api/v1/enrollment/clazz",
+            "service": "enrollment-service"
+        },
+        "get-days": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "GET"
+            ],
+            "path": "/api/v1/enrollment/day",
+            "service": "enrollment-service"
+        },
+        "get-lessions": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "GET"
+            ],
+            "path": "/api/v1/enrollment/lession",
+            "service": "enrollment-service"
+        },
+        "new-schedule": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "POST"
+            ],
+            "path": "/api/v1/enrollment/schedule",
+            "service": "enrollment-service"
+        },
+        "get-schedules": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "GET"
+            ],
+            "path": "/api/v1/enrollment/schedule",
+            "service": "enrollment-service"
+        },
+        "new-enrollment": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "POST"
+            ],
+            "path": "/api/v1/enrollment",
+            "service": "enrollment-service"
+        },
+        "delete-enrollment": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "DELETE"
+            ],
+            "path": "/api/v1/enrollment",
+            "service": "enrollment-service"
+        },
+        "get-enrollments": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "GET"
+            ],
+            "path": "/api/v1/enrollment",
+            "service": "enrollment-service"
+        },
+        "get-all-course-enrollments": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "GET"
+            ],
+            "path": "/api/v1/enrollment/course",
+            "service": "enrollment-service"
+        },
+        "get-schedule-by-week": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "GET"
+            ],
+            "path": "/api/v1/enrollment/schedule/myself/week",
+            "service": "enrollment-service"
+        },
+        "create-update-grade": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "POST"
+            ],
+            "path": "/api/v1/grade",
+            "service": "grade-service"
+        },
+        "get-grade-semester": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "GET"
+            ],
+            "path": "/api/v1/grade/semester",
+            "service": "grade-service"
+        },
+        "new-bank": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "POST"
+            ],
+            "path": "/api/v1/payment/bank",
+            "service": "payment-service"
+        },
+        "get-bank-by-codeId": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "GET"
+            ],
+            "path": "/api/v1/payment/bank",
+            "service": "payment-service"
+        },
+        "delete-bank-by-codeId": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "DELETE"
+            ],
+            "path": "/api/v1/payment/bank",
+            "service": "payment-service"
+        },
+        "new-bill": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "POST"
+            ],
+            "path": "/api/v1/payment/bill",
+            "service": "payment-service"
+        },
+        "get-bills": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "GET"
+            ],
+            "path": "/api/v1/payment/bill",
+            "service": "payment-service"
+        },
+        "delete-bill-by-clazzId": {
+            "apiEndpoints": [
+                "api"
+            ],
+            "methods": [
+                "DELETE"
+            ],
+            "path": "/api/v1/payment/bill",
+            "service": "payment-service"
+        }
+    }
+}

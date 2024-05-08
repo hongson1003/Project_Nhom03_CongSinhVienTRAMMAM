@@ -357,7 +357,6 @@ const deleteDepartment = async (departmentId) => {
 }
 
 // specialize
-
 const createNewSpecialize = async (data, department) => {
     try {
         const specialize = await db.Specialize.create(data);
@@ -371,6 +370,7 @@ const createNewSpecialize = async (data, department) => {
         }
         const specializeDepartment = specialize.dataValues;
         specializeDepartment.department = department;
+
         return {
             errCode: 0,
             message: 'Specialize created successfully',

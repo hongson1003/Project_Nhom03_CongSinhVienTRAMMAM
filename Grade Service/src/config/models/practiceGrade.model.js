@@ -3,7 +3,7 @@ const {
     Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-    class PracticeGrade extends Model {
+    class Practice_Grade extends Model {
         /**
          * Helper method for defining associations.
          * This method is not a part of Sequelize lifecycle.
@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
 
         }
     }
-    PracticeGrade.init({
+    Practice_Grade.init({
         joinClazzId: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -22,12 +22,11 @@ module.exports = (sequelize, DataTypes) => {
         score1: DataTypes.FLOAT,
         score2: DataTypes.FLOAT,
         score3: DataTypes.FLOAT,
-        finalScore: DataTypes.FLOAT,
         createdAt: DataTypes.DATE,
         updatedAt: DataTypes.DATE,
     }, {
         sequelize,
-        modelName: 'PracticeGrade',
+        modelName: 'Practice_Grade',
     });
-    return PracticeGrade;
+    return Practice_Grade;
 };

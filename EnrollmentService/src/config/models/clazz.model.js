@@ -11,7 +11,18 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-
+            Clazz.belongsTo(models.Course_Register, {
+                foreignKey: 'courseRegisterId',
+                as: 'courseRegister'
+            })
+            Clazz.hasMany(models.Join_Clazz, {
+                foreignKey: 'clazzId',
+                as: 'joinClazzs'
+            })
+            Clazz.hasMany(models.Clazz_Schedule, {
+                foreignKey: 'clazzId',
+                as: 'schedules'
+            })
         }
     }
     Clazz.init({
@@ -19,6 +30,14 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             primaryKey: true,
             type: DataTypes.STRING,
+        },
+        name: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        teacherId: {
+            type: DataTypes.STRING,
+            allowNull: false,
         },
         quantity: {
             type: DataTypes.INTEGER,
@@ -38,7 +57,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false,
             references: {
-                model: 'CourseRegister',
+                model: 'Course_Register',
                 key: 'registerId'
             }
         },

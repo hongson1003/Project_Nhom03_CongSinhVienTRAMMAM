@@ -3,7 +3,7 @@ const {
     Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-    class Course_Semester extends Model {
+    class Semester_Course extends Model {
         /**
          * Helper method for defining associations.
          * This method is not a part of Sequelize lifecycle.
@@ -11,11 +11,18 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-
+            Semester_Course.belongsTo(models.Semester, {
+                foreignKey: 'semesterId',
+                as: 'semester',
+            });
+            Semester_Course.belongsTo(models.Course, {
+                foreignKey: 'courseId',
+                as: 'course',
+            });
 
         }
     }
-    Course_Semester.init({
+    Semester_Course.init({
         semesterId: {
             allowNull: false,
             primaryKey: true,
@@ -39,7 +46,7 @@ module.exports = (sequelize, DataTypes) => {
         updatedAt: DataTypes.DATE,
     }, {
         sequelize,
-        modelName: 'Course_Semester',
+        modelName: 'Semester_Course',
     });
-    return Course_Semester;
+    return Semester_Course;
 };

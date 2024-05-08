@@ -14,9 +14,27 @@ module.exports = {
                 type: Sequelize.STRING,
                 allowNull: false
             },
-            addressMain: {
+            branchName: {
+                type: Sequelize.STRING,
+                allowNull: false,
+            },
+            cardNumber: {
+                type: Sequelize.STRING,
+                allowNull: false,
+                unique: true
+            },
+            accountNumber: {
+                type: Sequelize.STRING,
+                allowNull: false,
+                unique: true
+            },
+            password: {
                 type: Sequelize.STRING,
                 allowNull: false
+            },
+            userId: {
+                type: Sequelize.STRING,
+                allowNull: false,
             },
             createdAt: {
                 type: Sequelize.DATE,

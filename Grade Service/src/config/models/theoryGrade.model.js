@@ -3,7 +3,7 @@ const {
     Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-    class TheoryGrade extends Model {
+    class Theory_Grade extends Model {
         /**
          * Helper method for defining associations.
          * This method is not a part of Sequelize lifecycle.
@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
 
         }
     }
-    TheoryGrade.init({
+    Theory_Grade.init({
         joinClazzId: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
         updatedAt: DataTypes.DATE,
     }, {
         sequelize,
-        modelName: 'TheoryGrade',
+        modelName: 'Theory_Grade',
     });
-    return TheoryGrade;
+    return Theory_Grade;
 };

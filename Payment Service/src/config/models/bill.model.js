@@ -25,6 +25,10 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             primaryKey: true,
         },
+        price: {
+            type: DataTypes.FLOAT,
+            allowNull: false,
+        },
         semester: {
             type: DataTypes.STRING,
             allowNull: false,

@@ -6,9 +6,9 @@ require('dotenv').config();
 const os = require('os')
 const expiredIn = +process.env.EXPIRESD_IN;
 const secretKey = process.env.SECRET_KEY;
+const maxAge = +process.env.MAX_AGE;
 
 const signUp = async (data) => {
-    let t = null;
     try {
         // check user exists;
         let userExists = await db.User.findOne({
@@ -28,11 +28,10 @@ const signUp = async (data) => {
         const passwordHashed = handleUser.hashPassword(data.password);
         data.password = passwordHashed;
         //create new user;
-        t = await db.sequelize.transaction();
 
         let newUser = await db.User.create(data, {
             raw: true
-        }, { transaction: t });
+        });
         if (newUser) {
             const userRole = await db.User.findOne({
                 where: {
@@ -45,39 +44,10 @@ const signUp = async (data) => {
                     as: 'role',
                 }
             })
-            // create access token, refresh token
-            const access_token = handleJWT.signJwt(handleUser.getUser(userRole), secretKey, expiredIn);
-            const refresh_token = uuidv4();
-            // save refresh token to db
-            const token = await db.Token.create({
-                userId: newUser.codeId,
-                access_token: access_token,
-                refresh_token: refresh_token,
-                createdTime: new Date(),
-                expiredTime: new Date(new Date().getTime() + expiredIn * 1000)
-            }, { transaction: t });
-            // save sessions
-            const computerName = os.hostname();
-            const ipAddress = handleUser.getIPAddress();
-
-            await db.Session.create({
-                userId: newUser.codeId,
-                ipAddress: ipAddress,
-                deviceInfo: computerName,
-                loginTime: new Date(),
-                logoutTime: new Date(new Date().getTime() + expiredIn * 1000),
-                duration: expiredIn,
-                tokenId: token.tokenId,
-            }, { transaction: t });
-            await t.commit();
             return {
                 errCode: 0,
                 message: 'User created successfully',
-                data: {
-                    user: handleUser.getUser(userRole),
-                    access_token: access_token,
-                    refresh_token: refresh_token
-                }
+                data: handleUser.getUser(userRole)
             }
         }
         return {
@@ -86,7 +56,6 @@ const signUp = async (data) => {
         }
 
     } catch (error) {
-        await t.rollback();
         throw error;
     }
 }
@@ -137,7 +106,7 @@ const getRolesLimit = async (limit) => {
     }
 }
 
-const signIn = async (codeId, password, access_token, refresh_token) => {
+const signIn = async (codeId, password, access_token_old, refresh_token_old) => {
     let t = null;
     try {
         const user = await db.User.findOne({
@@ -160,7 +129,7 @@ const signIn = async (codeId, password, access_token, refresh_token) => {
             t = await db.sequelize.transaction();
             const isMatch = handleUser.comparePassword(password, user.password);
             if (isMatch) {
-                const access_token = handleJWT.signJwt(handleUser.getUser(user), secretKey, expiredIn);
+                const access_token = handleJWT.signJwt(handleUser.getUser(user), secretKey, expiredIn, maxAge);
                 const refresh_token = uuidv4();
                 // save sessions
                 const computerName = os.hostname();
@@ -171,18 +140,24 @@ const signIn = async (codeId, password, access_token, refresh_token) => {
                         userId: user.codeId,
                         ipAddress: ipAddress,
                         deviceInfo: computerName,
-                    }
+                    },
                 });
 
                 if (session) {
-                    if (session.logoutTime >= new Date()) {
+                    if (session.logoutTime >= new Date() && access_token_old && refresh_token_old) {
                         return {
                             errCode: 1,
                             message: 'User is already logged in',
                             data: {
-                                user: handleUser.getUser(user),
-                                access_token: access_token,
-                                refresh_token: refresh_token
+                                user: {
+                                    ...handleUser.getUser(user),
+                                    expiredIn: expiredIn,
+                                    maxAge: maxAge
+                                },
+                                expiredIn: expiredIn,
+                                maxAge: maxAge,
+                                access_token: access_token_old,
+                                refresh_token: refresh_token_old
                             }
                         }
                     } else {
@@ -209,11 +184,16 @@ const signIn = async (codeId, password, access_token, refresh_token) => {
                         await t.commit();
                         return {
                             errCode: 0,
-                            message: 'User found',
+                            message: 'Login success',
                             data: {
-                                user: handleUser.getUser(user),
+                                user: {
+                                    ...handleUser.getUser(user),
+                                    expiredIn: expiredIn,
+                                    maxAge: maxAge
+                                },
                                 access_token: access_token,
-                                refresh_token: refresh_token
+                                refresh_token: refresh_token,
+
                             }
                         }
                     }
@@ -243,11 +223,15 @@ const signIn = async (codeId, password, access_token, refresh_token) => {
 
                 return {
                     errCode: 0,
-                    message: 'User found',
+                    message: 'Login success',
                     data: {
-                        user: handleUser.getUser(user),
+                        user: {
+                            ...handleUser.getUser(user),
+                            expiredIn: expiredIn,
+                            maxAge: maxAge
+                        },
                         access_token: access_token,
-                        refresh_token: refresh_token
+                        refresh_token: refresh_token,
                     }
                 }
             }
@@ -261,6 +245,7 @@ const signIn = async (codeId, password, access_token, refresh_token) => {
             message: 'User not found'
         }
     } catch (error) {
+        console.log(error)
         await t.rollback();
         throw error;
     }
@@ -278,7 +263,7 @@ const signOut = async (user) => {
         if (result === 0) {
             return {
                 errCode: 1,
-                message: 'User not found'
+                message: 'Wrongs when log out user'
             }
         }
         return {
@@ -310,11 +295,166 @@ const createLog = async (data) => {
     }
 }
 
+const getUsers = async (limit, user) => {
+    try {
+        if (user.role.key === 'ADMIN') {
+            const users = await db.User.findAll({
+                limit: limit,
+                raw: false,
+                nest: true,
+                attributes: { exclude: ['password'] },
+                include: {
+                    model: db.Role,
+                    as: 'role',
+                    attributes: { exclude: ['password'] },
+                }
+            });
+
+            return {
+                errCode: 0,
+                message: 'Users found',
+                data: users
+            }
+        }
+        return {
+            errCode: 1,
+            message: 'User is not admin'
+        }
+    } catch (error) {
+        throw error;
+    }
+}
+
+const refreshToken = async (refresh_token) => {
+    var t = null;
+    try {
+        const tokenOld = await db.Token.findOne({
+            where: {
+                refresh_token: refresh_token
+            }
+        })
+        if (!tokenOld) {
+            return {
+                errCode: 1,
+                message: 'Unauthorized access'
+            }
+        };
+        const user = await db.User.findOne({
+            where: {
+                codeId: tokenOld.userId
+            },
+            include: [
+                {
+                    model: db.Role,
+                    as: 'role',
+                }
+            ],
+            attributes: {
+                exclude: ['createdAt', 'updatedAt', 'roleId']
+            },
+            raw: true,
+            nest: true,
+        });
+        t = await db.sequelize.transaction();
+        const access_token = handleJWT.signJwt(handleUser.getUser(user), secretKey, expiredIn, maxAge);
+        const newRefreshToken = uuidv4();
+
+        const token = await db.Token.create({
+            userId: user.codeId,
+            access_token: access_token,
+            refresh_token: newRefreshToken,
+            expiredTime: new Date(new Date().getTime() + expiredIn * 1000),
+            createdTime: new Date(),
+        }, { transaction: t });
+
+        if (token) {
+            const session = await db.Session.update({
+                loginTime: new Date(),
+                logoutTime: new Date(new Date().getTime() + expiredIn * 1000),
+                expiredTime: new Date(new Date().getTime() + expiredIn * 1000)
+            }, {
+                where: {
+                    userId: user.codeId
+                }
+            });
+            if (session) {
+                await t.commit();
+                return {
+                    errCode: 100,
+                    message: 'Token refreshed',
+                    data: {
+                        user: {
+                            ...handleUser.getUser(user),
+                            expiredIn: expiredIn,
+                            maxAge: maxAge
+                        },
+                        access_token: access_token,
+                        refresh_token: newRefreshToken,
+                    }
+                }
+            } else {
+                return {
+                    errCode: 1,
+                    message: 'Token not refreshed'
+                }
+            }
+        }
+    } catch (error) {
+        console.log(error)
+        if (t) {
+            await t.rollback();
+        }
+        throw error;
+    }
+}
+
+const reloadPage = async (refresh_token) => {
+    try {
+        const token = await db.Token.findOne({
+            where: {
+                refresh_token: refresh_token
+            }
+        });
+        if (!token) {
+            return {
+                errCode: 1,
+                message: 'Unauthorized access'
+            }
+        }
+        const access_token = token.access_token;
+        const data = handleJWT.verify(access_token, secretKey);
+        const user = data.data;
+        if (!user) {
+            return {
+                errCode: 1,
+                message: 'Unauthorized access'
+            }
+        }
+        return {
+            errCode: 0,
+            message: 'Reload page successfully',
+            data: {
+                user: user,
+                access_token: access_token,
+                refresh_token: refresh_token
+            }
+        }
+    } catch (error) {
+        if (error.name === 'TokenExpiredError') {
+            const refreshRes = await refreshToken(refresh_token);
+            return refreshRes;
+        }
+    }
+}
+
 module.exports = {
     signUp,
     findUserByCodeId,
     getRolesLimit,
     signIn,
     signOut,
-    createLog
+    createLog,
+    getUsers,
+    refreshToken,
+    reloadPage
 }

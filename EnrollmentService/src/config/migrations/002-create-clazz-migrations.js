@@ -3,11 +3,19 @@
 module.exports = {
     async up(queryInterface, Sequelize) {
 
-        await queryInterface.createTable('Clazz', {
-            clazzId: {
+        await queryInterface.createTable('Clazzs', {
+            ClazzId: {
                 allowNull: false,
                 primaryKey: true,
                 type: Sequelize.STRING,
+            },
+            name: {
+                type: Sequelize.STRING,
+                allowNull: false,
+            },
+            teacherId: {
+                type: Sequelize.STRING,
+                allowNull: false,
             },
             quantity: {
                 type: Sequelize.INTEGER,
@@ -40,6 +48,6 @@ module.exports = {
         });
     },
     async down(queryInterface, Sequelize) {
-        await queryInterface.dropTable('Clazz');
+        await queryInterface.dropTable('Clazzs');
     }
 };

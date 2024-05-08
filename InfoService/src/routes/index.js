@@ -1,10 +1,12 @@
 import infoController from '../controllers/infoController';
+const checkUserAuthorize = require('../middleware/checkUserAuthorize');
 
 const configRoutes = async (app) => {
     app.get('/health', (req, res) => {
         res.status(200).send({ status: 'OK' })
     })
 
+    app.use(checkUserAuthorize);
     // room routes
     app.post('/api/v1/new-room', infoController.createNewRoom);
     app.get('/api/v1/room', infoController.getRoom);

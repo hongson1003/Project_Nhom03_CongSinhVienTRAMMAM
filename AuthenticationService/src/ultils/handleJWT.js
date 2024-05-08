@@ -1,8 +1,12 @@
 import jwt from 'jsonwebtoken';
 
-const signJwt = (data, secret, expiresIn) => {
+const signJwt = (data, secret, expiresIn, maxAge) => {
     let token = jwt.sign({
-        data: data
+        data: {
+            ...data,
+            expiresIn,
+            maxAge: maxAge
+        }
     }, secret, { expiresIn: expiresIn });
     return token;
 }

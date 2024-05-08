@@ -14,6 +14,10 @@ module.exports = {
                 allowNull: false,
                 primaryKey: true,
             },
+            price: {
+                type: Sequelize.FLOAT,
+                allowNull: false,
+            },
             semester: {
                 type: Sequelize.STRING,
                 allowNull: false,

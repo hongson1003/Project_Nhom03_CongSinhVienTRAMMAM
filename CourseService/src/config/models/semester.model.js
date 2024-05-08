@@ -11,8 +11,11 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-
-
+            Semester.belongsToMany(models.Course, {
+                through: 'Semester_Course',
+                foreignKey: 'semesterId',
+                as: 'courses',
+            });
         }
     }
     Semester.init({
@@ -25,6 +28,7 @@ module.exports = (sequelize, DataTypes) => {
         name: {
             type: DataTypes.STRING,
             allowNull: false,
+            unique: true,
         },
         specializeId: {
             type: DataTypes.INTEGER,

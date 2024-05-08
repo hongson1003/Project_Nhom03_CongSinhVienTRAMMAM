@@ -7,12 +7,13 @@ module.exports = {
             joinClazzId: {
                 type: Sequelize.INTEGER,
                 primaryKey: true,
+                autoIncrement: true,
             },
-            clazzScheduleId: {
-                type: Sequelize.INTEGER,
+            clazzId: {
+                type: Sequelize.STRING,
                 references: {
-                    model: 'Clazz_Schedules',
-                    key: 'clazzScheduleId'
+                    model: 'Clazzs',
+                    key: 'clazzId'
                 }
             },
             studentId: {

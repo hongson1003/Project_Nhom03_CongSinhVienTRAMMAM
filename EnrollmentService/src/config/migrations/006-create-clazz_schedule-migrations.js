@@ -12,16 +12,38 @@ module.exports = {
             clazzId: {
                 type: Sequelize.STRING,
                 references: {
-                    model: 'Clazz',
+                    model: 'Clazzs',
                     key: 'clazzId'
-                }
+                },
+                onDelete: 'CASCADE',
+                onUpdate: 'CASCADE'
             },
-            scheduleId: {
+            dayId: {
                 type: Sequelize.INTEGER,
+                allowNull: false,
                 references: {
-                    model: 'Schedules',
-                    key: 'scheduleId'
-                }
+                    model: 'Days',
+                    key: 'dayId'
+                },
+            },
+            lessionId: {
+                type: Sequelize.INTEGER,
+                allowNull: false,
+                references: {
+                    model: 'Lessions',
+                    key: 'lessionId'
+                },
+            },
+            startTime: {
+                type: Sequelize.DATE,
+                allowNull: false
+            },
+            groupPractise: {
+                type: Sequelize.INTEGER,
+            },
+            endTime: {
+                type: Sequelize.DATE,
+                allowNull: false
             },
             createdAt: {
                 type: Sequelize.DATE,
