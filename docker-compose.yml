@@ -43,7 +43,7 @@ services:
 
   # Grade service image
   grade_service:
-    build: ./EnrollmentService
+    build: ./GradeService
     ports:
       - "8084:8084"
     depends_on:
