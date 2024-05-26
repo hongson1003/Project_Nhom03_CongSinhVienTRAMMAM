@@ -1,4 +1,4 @@
-name: Push Request Actions
+name: Push ApiGateWay Actions
 
 on:
   push:
