@@ -53,13 +53,29 @@ services:
 
   # Payment service image
   payment_service:
-    build: ./Payment Service
+    build: ./PaymentService
     ports:
       - "8085:8085"
     depends_on:
       - mysql_payment_service
     volumes:
       - mysql-payment-data:/var/lib/mysql
+
+  # Api Gateway image
+  api_gateway:
+    build: ./ApiGatewayService
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis # Thêm service Redis vào dependencies của API Gateway
+    environment:
+      REDIS_HOST: redis # Sử dụng tên service của Redis
+      REDIS_PORT: 6379
+
+  redis:
+    image: "redis:3.2.12"
+    ports:
+      - "6379:6379"
 
   # MySQL for authentication
   mysql_authen_service:
