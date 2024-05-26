@@ -1,0 +1,60 @@
+name: Push Request Actions
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - typescript-project/**
+  workflow_dispatch:
+
+jobs:
+  push-request:
+    runs-on: ubuntu-latest
+
+    #Setting the direction to execute actions
+    defaults:
+      run:
+        working-directory: typescript-project
+
+    steps:
+      - uses: actions/checkout@v2
+
+      # Setup NodeJS
+      - name: Setup NodeJS 16
+        uses: actions/setup-node@v2
+        with:
+          node-version: "16.x"
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
+      
+      # Run linting
+      - name: Run linting
+        uses: wearerequired/lint-action@v2
+        with:
+          eslint: true
+          prettier: true
+
+      # Compile the code
+      - name: Build project
+        run: npm run build --if-present
+
+      # Execute tests
+      - name: Execute tests
+        run: npm test
+
+      # Config git user
+      - run: git config user.email "tranlehuy0407@gmail.com"
+      - run: git config user.name "@github-ci"
+
+      # Update version
+      - name: 'change version'
+        uses: reedyuk/npm-version@1.1.1
+        with:
+          version: '1.0.1'
+          package: 'package-lock.json'
+          git-tag-version: 'true'
+
+      # Repush to github
+      - run: git push
+      - run: git push --follow-tags
