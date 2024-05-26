@@ -38,6 +38,10 @@ jobs:
       - name: Version app
         run: npm version patch
 
+      # Pulling project
+      - name: Pull project
+        run: git pull
+
       # Repush to github
       - run: git push
       - run: git push --follow-tags
