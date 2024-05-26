@@ -12,11 +12,6 @@ jobs:
   push-request:
     runs-on: ubuntu-latest
 
-    #Setting the direction to execute actions
-    defaults:
-      run:
-        working-directory: typescript-project
-
     steps:
       - uses: actions/checkout@v2
 
