@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'typescript-project/**'
   workflow_dispatch:
 
 jobs:
@@ -30,7 +28,7 @@ jobs:
 
       # Update version
       - name: Update Package Version
-        uses: reedyuk/npm-version@v1
+        uses: reedyuk/npm-version
         with:
           version: 'patch'
           package: 'package-lock.json'
