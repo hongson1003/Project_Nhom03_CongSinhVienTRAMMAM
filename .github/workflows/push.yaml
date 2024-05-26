@@ -1,18 +1,18 @@
-name: Update Package Version
+name: Push Request Actions
 
 on:
   push:
     branches:
       - main
+
   workflow_dispatch:
 
 jobs:
-  update-version:
+  push-request:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
       # Setup NodeJS
       - name: Setup NodeJS 16
@@ -22,28 +22,26 @@ jobs:
           cache: 'npm'
           cache-dependency-path: package-lock.json
 
+      # Compile the code
+      - name: Build project
+        run: npm run build --if-present
+
       # Install libraries
-      - name: Install Dependencies
+      - name: Install libraries
         run: npm install
 
+      # Config git user
+      - run: git config user.email "tranlehuy0407@gmail.com"
+      - run: git config user.name "@github-ci"
+
       # Update version
-      - name: Update Package Version
-        uses: reedyuk/npm-version
+      - name: 'change version'
+        uses: reedyuk/npm-version@1.1.1
         with:
-          version: 'patch'
+          version: '1.0.1'
           package: 'package-lock.json'
           git-tag-version: 'true'
 
-      # Commit changes
-      - name: Commit Version Update
-        run: |
-          git config user.email "tranlehuy0407@gmail.com"
-          git config user.name "GitHub Actions"
-          git add package-lock.json
-          git commit -m "chore: Update package-lock.json version [skip ci]"
-
-      # Push changes
-      - name: Push Changes
-        uses: ad-m/github-push-action
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+      # Repush to github
+      - run: git push
+      - run: git push --follow-tags
