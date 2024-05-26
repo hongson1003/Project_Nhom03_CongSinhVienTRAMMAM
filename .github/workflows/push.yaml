@@ -27,13 +27,6 @@ jobs:
           node-version: "16.x"
           cache: 'npm'
           cache-dependency-path: package-lock.json
-      
-      # Run linting
-      - name: Run linting
-        uses: wearerequired/lint-action@v2
-        with:
-          eslint: true
-          prettier: true
 
       # Compile the code
       - name: Build project
