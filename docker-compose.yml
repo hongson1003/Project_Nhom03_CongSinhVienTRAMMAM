@@ -1,6 +1,7 @@
 version: '3.8'
 
 services:
+  # Authentication service image
   authentication_service:
     build: ./AuthenticationService
     ports:
@@ -10,6 +11,7 @@ services:
     volumes:
       - mysql-authen-data:/var/lib/mysql
 
+  # Info service image
   info_service:
     build: ./InfoService
     ports:
@@ -19,6 +21,7 @@ services:
     volumes:
       - mysql-info-data:/var/lib/mysql
 
+  # Course service image
   course_service:
     build: ./CourseService
     ports:
@@ -28,6 +31,7 @@ services:
     volumes:
       - mysql-course-data:/var/lib/mysql
 
+  # Enrollment service image
   enrollment_service:
     build: ./EnrollmentService
     ports:
@@ -37,6 +41,7 @@ services:
     volumes:
       - mysql-enrollment-data:/var/lib/mysql
 
+  # Grade service image
   grade_service:
     build: ./EnrollmentService
     ports:
@@ -46,6 +51,7 @@ services:
     volumes:
       - mysql-grade-data:/var/lib/mysql
 
+  # Payment service image
   payment_service:
     build: ./Payment Service
     ports:
@@ -55,6 +61,7 @@ services:
     volumes:
       - mysql-payment-data:/var/lib/mysql
 
+  # MySQL for authentication
   mysql_authen_service:
     image: mysql:8.0
     container_name: mysql_authen_service
@@ -66,6 +73,7 @@ services:
     volumes:
       - mysql-authen-data:/var/lib/mysql
 
+  # MySQL for info service
   mysql_info_service:
     image: mysql:8.0
     container_name: mysql_info_service
@@ -77,6 +85,7 @@ services:
     volumes:
       - mysql-info-data:/var/lib/mysql
 
+  # MySQL for course service
   mysql_course_service:
     image: mysql:8.0
     container_name: mysql_course_service
@@ -88,6 +97,7 @@ services:
     volumes:
       - mysql-course-data:/var/lib/mysql
 
+  # MySQL for enrollment service
   mysql_enrollment_service:
     image: mysql:8.0
     container_name: mysql_enrollment_service
@@ -99,6 +109,7 @@ services:
     volumes:
       - mysql-enrollment-data:/var/lib/mysql
 
+  # MySQL grade service
   mysql_grade_service:
     image: mysql:8.0
     container_name: mysql_grade_service
@@ -110,6 +121,7 @@ services:
     volumes:
       - mysql-grade-data:/var/lib/mysql
 
+  # MySQL for payment service
   mysql_payment_service:
     image: mysql:8.0
     container_name: mysql_payment_service
