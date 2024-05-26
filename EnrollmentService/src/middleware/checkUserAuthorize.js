@@ -6,7 +6,6 @@ const checkUserAuthorize = (req, res, next) => {
         const userInfo = req.headers['user-info'];
         const refreshToken = req.headers['refresh-token'];
         const accessToken = req.headers['authorization'];
-
         if (!userInfo || !refreshToken || !accessToken) {
             return res.status(200).json({
                 errCode: 400,

@@ -1,0 +1,130 @@
+version: '3.8'
+
+services:
+  authentication_service:
+    build: ./AuthenticationService
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql_authen_service
+    volumes:
+      - mysql-authen-data:/var/lib/mysql
+
+  info_service:
+    build: ./InfoService
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mysql_info_service
+    volumes:
+      - mysql-info-data:/var/lib/mysql
+
+  course_service:
+    build: ./CourseService
+    ports:
+      - "8082:8082"
+    depends_on:
+      - mysql_course_service
+    volumes:
+      - mysql-course-data:/var/lib/mysql
+
+  enrollment_service:
+    build: ./EnrollmentService
+    ports:
+      - "8083:8083"
+    depends_on:
+      - mysql_enrollment_service
+    volumes:
+      - mysql-enrollment-data:/var/lib/mysql
+
+  grade_service:
+    build: ./EnrollmentService
+    ports:
+      - "8084:8084"
+    depends_on:
+      - mysql_grade_service
+    volumes:
+      - mysql-grade-data:/var/lib/mysql
+
+  payment_service:
+    build: ./Payment Service
+    ports:
+      - "8085:8085"
+    depends_on:
+      - mysql_payment_service
+    volumes:
+      - mysql-payment-data:/var/lib/mysql
+
+  mysql_authen_service:
+    image: mysql:8.0
+    container_name: mysql_authen_service
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: authentication_service
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-authen-data:/var/lib/mysql
+
+  mysql_info_service:
+    image: mysql:8.0
+    container_name: mysql_info_service
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: info_service
+    ports:
+      - "3311:3306"
+    volumes:
+      - mysql-info-data:/var/lib/mysql
+
+  mysql_course_service:
+    image: mysql:8.0
+    container_name: mysql_course_service
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: course_service
+    ports:
+      - "3308:3306"
+    volumes:
+      - mysql-course-data:/var/lib/mysql
+
+  mysql_enrollment_service:
+    image: mysql:8.0
+    container_name: mysql_enrollment_service
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: enrollment_service
+    ports:
+      - "3309:3306"
+    volumes:
+      - mysql-enrollment-data:/var/lib/mysql
+
+  mysql_grade_service:
+    image: mysql:8.0
+    container_name: mysql_grade_service
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: grade_service
+    ports:
+      - "3310:3306"
+    volumes:
+      - mysql-grade-data:/var/lib/mysql
+
+  mysql_payment_service:
+    image: mysql:8.0
+    container_name: mysql_payment_service
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: payment_service
+    ports:
+      - "3312:3306"
+    volumes:
+      - mysql-payment-data:/var/lib/mysql
+
+volumes:
+  mysql-authen-data:
+  mysql-info-data:
+  mysql-course-data:
+  mysql-enrollment-data:
+  mysql-grade-data:
+  mysql-payment-data:

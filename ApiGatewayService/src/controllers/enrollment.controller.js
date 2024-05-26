@@ -1,17 +1,38 @@
 const gateway = require('../config/gateway.config.json');
 const axios = require('../config/axios').default;
+import CircuitBreaker from 'opossum';
+import getRedis from '../config/redis';
+
+// Khởi tạo một mạch Circuit Breaker duy nhất
+const breaker = new CircuitBreaker(async (semester) => {
+    const response = await axios.get(gateway.services['enrollment-service'].url + gateway.routes['get-course-registers'].path + `?semester=${semester}`);
+    return response;
+}, {
+    enabled: true,
+    timeout: 10000, // If our function takes longer than 10 seconds, trigger a failure
+    errorThresholdPercentage: 50, // When 50% of requests fail, trip the circuit
+    volumeThreshold: 5,
+    rollingCountTimeout: 300000,
+    resetTimeout: 60000 // After 60 seconds, try again.
+});
 
 const getCourseRegistersBySemester = async (req, res, next) => {
     try {
         const semester = req.query.semester;
-        const root = gateway.services['enrollment-service'].url;
-        const path = gateway.routes['get-course-registers'].path + `?semester=${semester}`;
-        const enrollRes = await axios(root + path);
-        return res.status(200).json(enrollRes);
+        // Gọi API thông qua mạch Circuit Breaker
+        const result = await breaker.fire(semester);
+        return res.status(200).json(result);
     } catch (error) {
+        if (!error.message)
+            error.message = 'Server is busy, please try again later';
+        else 
+            error.message = error.message + ', please try again later';
         next(error);
     }
-}
+};
+
+
+
 
 const newCourseRegister = async (req, res, next) => {
     try {
@@ -169,13 +190,44 @@ const getCourseEnrollments = async (req, res, next) => {
 const getScheduleMyself = async (req, res, next) => {
     try {
         const week = +req.params.week;
+        const cache = req.query.cache;
+        const startRequestTime = Date.now();
+        if (cache === 'CACHE'){
+            const redis = await getRedis();
+            const key = `getScheduleMyself_${week}`;
+            const value = await redis.get(key);
+            if (value) {
+                const endRequestTime = Date.now();
+                return res.status(200).json({
+                    ...JSON.parse(value),
+                    time: endRequestTime - startRequestTime
+                });
+            }
+        }else if (cache === 'NO-CACHE') {
+            const redis = await getRedis();
+            const key = `getScheduleMyself_${week}`;
+            await redis.del(key);
+        }
+        
+        if (!cache) {
+            return res.status(200).json({ message: 'Cache is not implemented yet' });
+        }
         if (!week) {
             return res.status(400).json({ message: 'Week is required' });
         }
         const root = gateway.services['enrollment-service'].url;
         const path = gateway.routes['get-schedule-by-week'].path + `/${week}`;
         const enrollRes = await axios.get(root + path);
-        return res.status(200).json(enrollRes);
+        const endRequestTime = Date.now();
+        if (cache === 'CACHE') {
+            const redis = await getRedis();
+            const key = `getScheduleMyself_${week}`;
+            await redis.set(key, JSON.stringify(enrollRes));
+        }
+        return res.status(200).json({
+            ...enrollRes,
+            time: endRequestTime - startRequestTime
+        });
     } catch (error) {
         next(error);
     }

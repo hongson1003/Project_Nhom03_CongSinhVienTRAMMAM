@@ -6,6 +6,8 @@ const configCourseRoute = require('./course.route');
 const configEnrollmentRoute = require('./enrollment.route');
 const configGradeRoute = require('./grade.route');
 const configPaymentRoute = require('./payment.route');
+import { rateLimiterMiddleware } from '../middleware/block.middleware';
+
 
 const configRoutes = async (app) => {
     app.get('/health', (req, res) => {
@@ -14,7 +16,7 @@ const configRoutes = async (app) => {
         });
     })
 
-    app.post(gateway.routes['login-route'].path, authController.signIn);
+    app.post(gateway.routes['login-route'].path,rateLimiterMiddleware, authController.signIn);
     app.post(gateway.routes['logout-route'].path, authController.signOut);
     app.post(gateway.routes['signup-route'].path, authController.signUp);
     app.post(gateway.routes.reload.path, authController.reload);

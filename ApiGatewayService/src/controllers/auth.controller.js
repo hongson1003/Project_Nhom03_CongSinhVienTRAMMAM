@@ -2,8 +2,6 @@ const { configAuthorize } = require('../config/axios');
 const gateway = require('../config/gateway.config.json');
 const axios = require('../config/axios').default;
 
-// const axios = require('axios');
-
 const signIn = async (req, res, next) => {
     try {
         const path = req.path;

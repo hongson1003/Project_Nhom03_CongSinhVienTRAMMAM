@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_enrollment_service
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: enrollment_service
+    ports:
+      - "3309:3306" # Change external port to 3307 to avoid conflicts
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  backend:
+    build:
+      context: .
+    container_name: backend_enrollment_service
+    environment:
+      NODE_ENV: development
+      PORT: 8083
+      BACKEND_URL: http://localhost:8083
+      DATABASE_NAME: course_service
+      DATABASE_USERNAME: root
+      DATABASE_PASSWORD: 123456
+      DATABASE_HOST: mysql
+      DIALECT: mysql
+      DATABASE_PORT: 3306 # Internal port for MySQL container
+    ports:
+      - "8083:8083"
+    depends_on:
+      - mysql
+
+volumes:
+  mysql-data:

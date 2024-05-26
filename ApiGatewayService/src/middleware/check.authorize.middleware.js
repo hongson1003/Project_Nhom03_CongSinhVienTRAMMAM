@@ -1,4 +1,3 @@
-const { configAuthorize } = require("../config/axios");
 
 const checkAuthorize = (req, res, next) => {
     try {
@@ -10,7 +9,6 @@ const checkAuthorize = (req, res, next) => {
                 message: 'No Authorization'
             });
         }
-        configAuthorize(access_token, refresh_token);
         next();
     } catch (error) {
         next(error);
