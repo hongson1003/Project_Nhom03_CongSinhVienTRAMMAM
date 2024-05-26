@@ -1,1 +1,1 @@
-console.log('Init project');
+console.log('Hello World from main.js!');
