@@ -1,0 +1,43 @@
+name: Pull Request Actions
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  pull-request:
+    runs-on: ubuntu-latest
+
+    #Setting the direction to execute actions
+
+    steps:
+      - uses: actions/checkout@v2
+
+      # Setup NodeJS
+      - name: Setup NodeJS 16
+        uses: actions/setup-node@v2
+        with:
+          node-version: "16.x"
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
+      
+      # Install libraries
+      - name: Install libraries
+        run: npm ci
+
+      # Run linting
+      - name: Run linting
+        uses: wearerequired/lint-action@v2
+        with:
+          eslint: true
+          prettier: true
+
+      # Compile the code
+      - name: Build project
+        run: npm run build --if-present
+
+      # Execute tests
+      - name: Execute tests
+        run: npm test
