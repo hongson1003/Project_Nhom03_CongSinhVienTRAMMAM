@@ -396,6 +396,7 @@ const updateStudent = async (req, res, next) => {
 
 const createNewTeacher = async (req, res, next) => {
     try {
+        console.log(req.body)
         const { codeId, educationLevel, yearContactExpired } = req.body;
         if (!codeId || !educationLevel || !yearContactExpired) {
             return res.status(400).json({

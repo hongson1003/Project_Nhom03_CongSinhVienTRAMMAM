@@ -11,7 +11,7 @@ const breaker = new CircuitBreaker(async (semester) => {
     enabled: true,
     timeout: 10000, // If our function takes longer than 10 seconds, trigger a failure
     errorThresholdPercentage: 50, // When 50% of requests fail, trip the circuit
-    volumeThreshold: 5,
+    volumeThreshold: 2,
     rollingCountTimeout: 300000,
     resetTimeout: 60000 // After 60 seconds, try again.
 });
@@ -30,8 +30,6 @@ const getCourseRegistersBySemester = async (req, res, next) => {
         next(error);
     }
 };
-
-
 
 
 const newCourseRegister = async (req, res, next) => {
@@ -143,6 +141,10 @@ const createNewEnrollment = async (req, res, next) => {
         const root = gateway.services['enrollment-service'].url;
         const path = gateway.routes['new-enrollment'].path;
         const enrollRes = await axios.post(root + path, req.body);
+        // update redis
+        const redis = await getRedis();
+        const key = `getScheduleMyself_${req.body.week}`;
+        await redis.del(key);
         return res.status(200).json(enrollRes);
     } catch (error) {
         next(error);
@@ -156,6 +158,10 @@ const deleteEnrollment = async (req, res, next) => {
         const root = gateway.services['enrollment-service'].url;
         const path = gateway.routes['delete-enrollment'].path;
         const enrollRes = await axios.delete(root + path, { data: { enrollmentId } });
+        // update redis
+        const redis = await getRedis();
+        const key = `getScheduleMyself_${req.body.week}`;
+        await redis.del(key);
         return res.status(200).json(enrollRes);
     } catch (error) {
         next(error);
