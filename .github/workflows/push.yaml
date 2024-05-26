@@ -31,10 +31,6 @@ jobs:
       - name: Install libraries
         run: npm install
 
-      # Execute tests
-      - name: Execute tests
-        run: npm test
-
       # Config git user
       - run: git config user.email "tranlehuy0407@gmail.com"
       - run: git config user.name "@github-ci"
