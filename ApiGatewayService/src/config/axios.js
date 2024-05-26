@@ -48,7 +48,7 @@ axiosRetry(instance, {
             }
             return true;
         }else if (status === 500) {
-            return false;
+            return true;
         }
         return false;
     },
