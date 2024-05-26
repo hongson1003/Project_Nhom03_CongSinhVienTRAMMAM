@@ -853,6 +853,7 @@ const createNewTeacher = async (data) => {
             data: teacher
         }
     } catch (error) {
+        console.log(error)
         throw error
     }
 }

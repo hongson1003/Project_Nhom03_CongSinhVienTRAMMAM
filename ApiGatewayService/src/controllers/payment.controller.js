@@ -69,6 +69,7 @@ const createBill = async (req, res, next) => {
     }
 }
 
+
 const getBills = async (req, res, next) => {
     try {
         const { codeId, semester } = req.query;

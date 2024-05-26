@@ -56,6 +56,7 @@ const signUp = async (data) => {
         }
 
     } catch (error) {
+        console.log(error)
         throw error;
     }
 }
