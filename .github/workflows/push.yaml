@@ -35,12 +35,8 @@ jobs:
       - run: git config user.name "@github-ci"
 
       # Update version
-      - name: 'change version'
-        uses: reedyuk/npm-version@1.1.1
-        with:
-          version: '1.0.1'
-          package: 'package-lock.json'
-          git-tag-version: 'true'
+      - name: Version app
+        run: npm version patch
 
       # Repush to github
       - run: git push
