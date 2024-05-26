@@ -27,12 +27,8 @@ jobs:
           node-version: "16.x"
           cache: 'npm'
           cache-dependency-path: package-lock.json
-
-      # Install yarn
-      - name: Install yarn
-        run: npm install --global yarn
       
- # Run linting
+      # Run linting
       - name: Run linting
         uses: wearerequired/lint-action@v2
         with:
